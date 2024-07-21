@@ -1,70 +1,87 @@
-// Assuming you have a Transaction model  
-const Transaction = require('../models/Transaction');  
+const Transaction = require('../models/Transaction');
+const Book = require('../models/Book');
+const User = require('../models/user_model');
 
-exports.getAllTransactions = async (req, res) => {  
-  try {  
-    const transactions = await Transaction.find();  
-    res.json(transactions);  
-  } catch (error) {  
-    res.status(500).json({ message: error.message });  
-  }  
-};  
+// Create a new transaction
+exports.createTransaction = async (req, res) => {
+  const { userId, bookId, dueDate, transactionType } = req.body;
 
-exports.getTransactionById = async (req, res) => {  
-  try {  
-    const transaction = await Transaction.findById(req.params.id);  
-    if (!transaction) {  
-      return res.status(404).json({ message: 'Transaction not found' });  
-    }  
-    res.json(transaction);  
-  } catch (error) {  
-    res.status(500).json({ message: error.message });  
-  }  
-};  
+  // Validate transactionType
+  if (!['borrowed', 'returned'].includes(transactionType)) {
+    return res.status(400).json({ error: 'Invalid transaction type' });
+  }
 
-exports.createTransaction = async (req, res) => {  
-  const transaction = new Transaction({  
-    type: req.body.type,  
-    amount: req.body.amount,  
-    date: req.body.date,  
-    // Add more properties as needed  
-  });  
+  try {
+    // Check if user and book exist
+    const user = await User.findById(userId);
+    const book = await Book.findById(bookId);
 
-  try {  
-    const newTransaction = await transaction.save();  
-    res.status(201).json(newTransaction);  
-  } catch (error) {  
-    res.status(400).json({ message: error.message });  
-  }  
-};  
+    if (!user || !book) {
+      return res.status(404).json({ error: 'User or Book not found' });
+    }
 
-exports.updateTransaction = async (req, res) => {  
-  try {  
-    const transaction = await Transaction.findById(req.params.id);  
-    if (!transaction) {  
-      return res.status(404).json({ message: 'Transaction not found' });  
-    }  
+    // Create new transaction
+    const transaction = new Transaction({
+      userId,
+      bookId,
+      dueDate,
+      transactionType
+    });
 
-    transaction.type = req.body.type;  
-    transaction.amount = req.body.amount;  
-    transaction.date = req.body.date;  
-    // Update other properties as needed  
-    const updatedTransaction = await transaction.save();  
-    res.json(updatedTransaction);  
-  } catch (error) {  
-    res.status(400).json({ message: error.message });  
-  }  
-};  
+    await transaction.save();
 
-exports.deleteTransaction = async (req, res) => {  
-  try {  
-    const transaction = await Transaction.findById(req.params.id);  
-    if (!transaction) {  
-      return res.status(404).json({ message: 'Transaction not found' });  
-    }  
-    await transaction.remove();  
-    res.json({ message: 'Transaction deleted' });  
-  } catch (error) {  
-    res.status(500).json({ message: error.message });  
-  }  
+    res.status(201).json({ message: 'Transaction created successfully', transaction });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+// Get all transactions
+exports.getTransactions = async (req, res) => {
+  try {
+    const transactions = await Transaction.find()
+      .populate('userId', 'name') // Populate user details
+      .populate('bookId', 'title author'); // Populate book details
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+// Get a transaction by ID
+exports.getTransactionById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const transaction = await Transaction.findById(id)
+      .populate('userId', 'name') // Populate user details
+      .populate('bookId', 'title author'); // Populate book details
+
+    if (!transaction) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
+
+    res.status(200).json(transaction);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+// Get transactions by user ID
+exports.getTransactionsByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const transactions = await Transaction.find({ userId })
+      .populate('bookId', 'title author'); // Populate book details
+
+    if (transactions.length === 0) {
+      return res.status(404).json({ error: 'No transactions found for this user' });
+    }
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
 };

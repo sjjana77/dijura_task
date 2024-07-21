@@ -10,7 +10,8 @@ const AddOrEditBook = () => {
     title: '',
     author: '',
     available: true,
-    userId: '' // Add userId to the state
+    user_id: '',
+    due_date: ''
   });
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -49,6 +50,21 @@ const AddOrEditBook = () => {
       })
         .then(response => {
           setBook(response.data);
+          if (response.data.transactionId && response.data.transactionId != "") {
+            axios.get(`${process.env.REACT_APP_API_URL}transactions/${response.data.transactionId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            })
+              .then(response => {
+                setBook((prev) => ({ ...prev, user_id: response.data.userId, due_date: response.data.dueDate }));
+              })
+              .catch(error => {
+                setError('Error fetching book details');
+                setLoading(false);
+              });
+
+          }
           setLoading(false);
         })
         .catch(error => {
@@ -58,6 +74,9 @@ const AddOrEditBook = () => {
     }
 
   }, [id, token]);
+
+
+
 
   const validateForm = () => {
     let isValid = true;

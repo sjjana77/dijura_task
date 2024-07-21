@@ -1,11 +1,17 @@
-const express = require('express');  
-const router = express.Router();  
-const transactionController = require('../controllers/transactionController');  
+const express = require('express');
+const router = express.Router();
+const { createTransaction, getTransactions, getTransactionById, getTransactionsByUserId } = require('../controllers/transactionController');
 
-router.get('/transactions', transactionController.getAllTransactions);  
-router.get('/transactions/:id', transactionController.getTransactionById);  
-router.post('/transactions', transactionController.createTransaction);  
-router.put('/transactions/:id', transactionController.updateTransaction);  
-router.delete('/transactions/:id', transactionController.deleteTransaction);  
+// Route for creating a new transaction
+router.post('/transactions', createTransaction);
+
+// Route for getting all transactions
+router.get('/transactions', getTransactions);
+
+// Route for getting a transaction by ID
+router.get('/transactions/:id', getTransactionById);
+
+// Route for getting transactions by user ID
+router.get('/transactions/user/:userId', getTransactionsByUserId);
 
 module.exports = router;
