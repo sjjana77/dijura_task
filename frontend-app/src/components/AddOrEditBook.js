@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch, MenuItem, Select, InputLabel, FormControl, InputAdornment } from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 
 const AddOrEditBook = () => {
   const { id } = useParams();
@@ -11,7 +13,7 @@ const AddOrEditBook = () => {
     author: '',
     available: true,
     user_id: '',
-    due_date: ''
+    due_date: null
   });
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -40,6 +42,7 @@ const AddOrEditBook = () => {
         setError('Error fetching users');
         setLoading(false);
       });
+
     // Fetch book data if id is present (edit functionality)
     if (id) {
       setLoading(true);
@@ -50,20 +53,23 @@ const AddOrEditBook = () => {
       })
         .then(response => {
           setBook(response.data);
-          if (response.data.transactionId && response.data.transactionId != "") {
+          if (response.data.transactionId) {
             axios.get(`${process.env.REACT_APP_API_URL}transactions/${response.data.transactionId}`, {
               headers: {
                 Authorization: `Bearer ${token}`
               }
             })
               .then(response => {
-                setBook((prev) => ({ ...prev, user_id: response.data.userId, due_date: response.data.dueDate }));
+                setBook(prev => ({
+                  ...prev,
+                  user_id: response.data.userId,
+                  due_date: response.data.dueDate ? new Date(response.data.dueDate) : null
+                }));
               })
               .catch(error => {
-                setError('Error fetching book details');
+                setError('Error fetching transaction details');
                 setLoading(false);
               });
-
           }
           setLoading(false);
         })
@@ -74,9 +80,6 @@ const AddOrEditBook = () => {
     }
 
   }, [id, token]);
-
-
-
 
   const validateForm = () => {
     let isValid = true;
@@ -101,6 +104,13 @@ const AddOrEditBook = () => {
     setBook(prevState => ({
       ...prevState,
       [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleDateChange = (date) => {
+    setBook(prevState => ({
+      ...prevState,
+      due_date: date
     }));
   };
 
@@ -190,8 +200,8 @@ const AddOrEditBook = () => {
               <FormControl fullWidth variant="outlined">
                 <InputLabel>User</InputLabel>
                 <Select
-                  name="userId"
-                  value={book.userId || ''}
+                  name="user_id"
+                  value={book.user_id || ''}
                   onChange={handleChange}
                   label="User"
                 >
@@ -205,6 +215,16 @@ const AddOrEditBook = () => {
                   ))}
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Due Date"
+                  value={book.due_date}
+                  onChange={handleDateChange}
+                  renderInput={(params) => <TextField {...params} fullWidth />}
+                />
+              </LocalizationProvider>
             </Grid>
             <Grid item xs={6}>
               <Button
