@@ -5,15 +5,7 @@ const User = require('../models/user_model'); // Import User model
 
 exports.getAllBooks = async (req, res) => {
   try {
-    const books = await Book.find().populate({
-      path: 'transactionId',
-      select: 'userId dueDate transactionType',
-      populate: {
-        path: 'userId',
-        select: 'username'
-      }
-    })
-      .exec();
+    const books = await Book.find();
     res.json(books);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -33,37 +25,17 @@ exports.getBookById = async (req, res) => {
 };
 
 exports.createBook = async (req, res) => {
-  const { title, author, available, user_id, due_date } = req.body;
+  const { title, author, available, count } = req.body;
   const book = new Book({
     title,
     author,
+    count,
     available: available ?? true // Default to true if not provided
   });
 
   try {
     const newBook = await book.save();
     // If userId is provided, create a transaction
-    if (user_id) {
-      // Check if user exists
-      const user = await User.findById(user_id);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      // Create new transaction
-      const transaction = new Transaction({
-        user_id,
-        bookId: newBook._id,
-        due_date,
-        transactionType: 'borrowed'
-      });
-
-      const newTransaction = await transaction.save();
-      console.log(newTransaction);
-      // Update the book with the transaction ID
-      newBook.transactionId = newTransaction._id;
-      await newBook.save();
-    }
     res.status(201).json(newBook);
   } catch (error) {
     res.status(400).json({ message: error.message });

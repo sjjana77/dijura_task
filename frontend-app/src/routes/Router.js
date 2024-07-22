@@ -8,6 +8,7 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import Book from '../components/Book';
 import AddOrEditBook from '../components/AddOrEditBook';
+import BookEntry from '../components/BookEntry';
 import ProtectedRoute from './ProtectedRoute'; // Import the ProtectedRoute component
 
 const Router = () => {
@@ -39,6 +40,14 @@ const Router = () => {
                         element={
                             <ProtectedRoute>
                                 <AddOrEditBook />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/react_task/books/borrow-return/:bookId"
+                        element={
+                            <ProtectedRoute>
+                                <BookEntry />
                             </ProtectedRoute>
                         }
                     />

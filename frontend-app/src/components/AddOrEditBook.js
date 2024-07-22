@@ -11,8 +11,7 @@ const AddOrEditBook = () => {
     title: '',
     author: '',
     available: true,
-    user_id: '',
-    due_date: ''
+    count: 1
   });
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -95,6 +94,11 @@ const AddOrEditBook = () => {
 
     if (!book.author) {
       errors.author = 'Author is required';
+      isValid = false;
+    }
+
+    if (!book.count) {
+      errors.count = 'Count is required';
       isValid = false;
     }
 
@@ -209,36 +213,16 @@ const AddOrEditBook = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>User</InputLabel>
-                <Select
-                  name="user_id"
-                  value={book.user_id || ''}
-                  onChange={handleChange}
-                  label="User"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {users.map((user) => (
-                    <MenuItem key={user._id} value={user._id}>
-                      {user.username}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
               <TextField
-                type='date'
+                type='number'
                 fullWidth
-                label="Due Date"
-                name="due_date"
-                value={book.due_date}
+                label="Count"
+                name="count"
+                value={book.count}
                 onChange={handleChange}
                 variant="outlined"
-                error={Boolean(errors.due_date)}
-                helperText={errors.due_date}
+                error={Boolean(errors.count)}
+                helperText={errors.count}
               />
               {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker

@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import BookIcon from '@mui/icons-material/Book'; // Import Book icon
 
 const Book = () => {
   const [books, setBooks] = useState([]);
@@ -116,6 +117,9 @@ const Book = () => {
                     </IconButton>
                     <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveBook(book._id)}>
                       <DeleteIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="borrow-return" onClick={() => navigate(`/react_task/books/borrow-return/${book._id}`)}>
+                      <BookIcon />
                     </IconButton>
                   </>
                 )

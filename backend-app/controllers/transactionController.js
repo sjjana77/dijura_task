@@ -29,6 +29,7 @@ exports.createTransaction = async (req, res) => {
     });
 
     await transaction.save();
+    
 
     res.status(201).json({ message: 'Transaction created successfully', transaction });
   } catch (error) {
@@ -76,6 +77,7 @@ exports.getTransactionsByUserId = async (req, res) => {
     const transactions = await Transaction.find({ userId })
       .populate('bookId', 'title author'); // Populate book details
 
+
     if (transactions.length === 0) {
       return res.status(404).json({ error: 'No transactions found for this user' });
     }
@@ -83,5 +85,17 @@ exports.getTransactionsByUserId = async (req, res) => {
     res.status(200).json(transactions);
   } catch (error) {
     res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+exports.getTransactionsByBookIdAndBorrowed = async (req, res) => {
+  // console.log(req.params);
+  try {
+    const { bookId, transactionType } = req.params;
+    
+    const transactions = await Transaction.find({ bookId, transactionType });
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch transactions' });
   }
 };
