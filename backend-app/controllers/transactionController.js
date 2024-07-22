@@ -29,9 +29,14 @@ exports.createTransaction = async (req, res) => {
     });
 
     await transaction.save();
-    
+    await updateBookAvailability(transaction.bookId);
+    const populatedTransaction = await Transaction.findById(transaction._id).populate('_id', 'username');
 
-    res.status(201).json({ message: 'Transaction created successfully', transaction });
+    res.status(201).json({
+      message: 'Transaction created successfully',
+      transaction,
+      username: user.username
+    });
   } catch (error) {
     res.status(500).json({ error: 'Server error', details: error.message });
   }
@@ -89,13 +94,75 @@ exports.getTransactionsByUserId = async (req, res) => {
 };
 
 exports.getTransactionsByBookIdAndBorrowed = async (req, res) => {
-  // console.log(req.params);
   try {
     const { bookId, transactionType } = req.params;
-    
+
+    // Find transactions
     const transactions = await Transaction.find({ bookId, transactionType });
-    res.json(transactions);
+
+    // Fetch and add user details to transactions
+    const populatedTransactions = await Promise.all(transactions.map(async transaction => {
+      const user = await User.findById(transaction.userId, 'username');
+      return {
+        ...transaction._doc,
+        username: user ? user.username : 'Unknown User'
+      };
+    }));
+
+    // Fetch book count
+    const book = await Book.findById(bookId);
+    // const bookCount = book ? book.count : 0;
+
+    res.json({
+      transactions: populatedTransactions,
+      book: book
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch transactions' });
+    res.status(500).json({ error: 'Failed to fetch transactions', details: error.message });
   }
+};
+
+
+exports.handleToggleTransactionType = async (req, res) => {
+  const { transactionId } = req.params;
+  const { transactionType } = req.body;
+
+  try {
+    const transaction = await Transaction.findById(transactionId);
+
+    if (!transaction) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
+
+    await updateBookAvailability(transaction.bookId);
+
+    // Update the transaction type and returnedDate if type is 'returned'
+    transaction.transactionType = transactionType;
+
+    if (transactionType === 'returned') {
+      transaction.returnedDate = new Date();
+    } else {
+      transaction.returnedDate = null;
+    }
+
+    await transaction.save();
+
+    res.json({ message: 'Transaction updated successfully', transaction });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+};
+
+const updateBookAvailability = async (bookId) => {
+  const transactions = await Transaction.find({ bookId, transactionType: 'borrowed' });
+  const book = await Book.findById(bookId);
+
+  if (!book) {
+    throw new Error('Book not found');
+  }
+
+  // Update the availability of the book
+  // console.log(book);
+  book.available = book.count >= transactions.length;
+  await book.save();
 };

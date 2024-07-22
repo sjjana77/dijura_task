@@ -20,6 +20,10 @@ const transactionSchema = new mongoose.Schema({
     enum: ['borrowed', 'returned'],
     required: true
   },
+  returnedDate: {
+    type: Date, // Date when the book is returned
+    default: null // Default value is null, as it will be set when the book is returned
+  },
   createdAt: {
     type: Date,
     default: Date.now
