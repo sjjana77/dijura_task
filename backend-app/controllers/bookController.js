@@ -33,14 +33,37 @@ exports.getBookById = async (req, res) => {
 };
 
 exports.createBook = async (req, res) => {
+  const { title, author, available, user_id, due_date } = req.body;
   const book = new Book({
-    title: req.body.title,
-    author: req.body.author,
-    // Add more properties as needed  
+    title,
+    author,
+    available: available ?? true // Default to true if not provided
   });
 
   try {
     const newBook = await book.save();
+    // If userId is provided, create a transaction
+    if (user_id) {
+      // Check if user exists
+      const user = await User.findById(user_id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Create new transaction
+      const transaction = new Transaction({
+        user_id,
+        bookId: newBook._id,
+        due_date,
+        transactionType: 'borrowed'
+      });
+
+      const newTransaction = await transaction.save();
+      console.log(newTransaction);
+      // Update the book with the transaction ID
+      newBook.transactionId = newTransaction._id;
+      await newBook.save();
+    }
     res.status(201).json(newBook);
   } catch (error) {
     res.status(400).json({ message: error.message });

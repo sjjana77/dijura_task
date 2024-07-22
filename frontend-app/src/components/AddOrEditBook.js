@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch, MenuItem, Select, InputLabel, FormControl, InputAdornment } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+
 
 const AddOrEditBook = () => {
   const { id } = useParams();
@@ -13,7 +12,7 @@ const AddOrEditBook = () => {
     author: '',
     available: true,
     user_id: '',
-    due_date: null
+    due_date: ''
   });
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -22,6 +21,10 @@ const AddOrEditBook = () => {
     title: '',
     author: ''
   });
+
+  useEffect(()=>{
+    console.log(book);
+  },[book])
 
   // Fetch the token from local storage
   const token = localStorage.getItem('token');
@@ -101,10 +104,19 @@ const AddOrEditBook = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setBook(prevState => ({
-      ...prevState,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    if(name == "user_id" && value != ""){
+      setBook(prevState => ({
+        ...prevState,
+        [name]: value, available: false
+      }));
+    }
+    else{
+      setBook(prevState => ({
+        ...prevState,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+
+    }
   };
 
   const handleDateChange = (date) => {
@@ -217,14 +229,25 @@ const AddOrEditBook = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TextField
+                type='date'
+                fullWidth
+                label="Due Date"
+                name="due_date"
+                value={book.due_date}
+                onChange={handleChange}
+                variant="outlined"
+                error={Boolean(errors.due_date)}
+                helperText={errors.due_date}
+              />
+              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Due Date"
                   value={book.due_date}
                   onChange={handleDateChange}
                   renderInput={(params) => <TextField {...params} fullWidth />}
                 />
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Grid>
             <Grid item xs={6}>
               <Button
