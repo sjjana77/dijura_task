@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'], // Define possible values for the role
-        required: true // Set to true if role is required, or remove if optional
+        enum: ['user', 'admin'],
+        required: true
     }
 });
 

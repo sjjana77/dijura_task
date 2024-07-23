@@ -1,7 +1,6 @@
-// Assuming you have a Book model  
 const Book = require('../models/Book');
-const Transaction = require('../models/Transaction'); // Import Transaction model
-const User = require('../models/user_model'); // Import User model
+const Transaction = require('../models/Transaction');
+const User = require('../models/user_model');
 
 exports.getAllBooks = async (req, res) => {
   try {
@@ -30,12 +29,11 @@ exports.createBook = async (req, res) => {
     title,
     author,
     count,
-    available: available ?? true // Default to true if not provided
+    available: available ?? true
   });
 
   try {
     const newBook = await book.save();
-    // If userId is provided, create a transaction
     res.status(201).json(newBook);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -52,7 +50,6 @@ exports.updateBook = async (req, res) => {
     book.title = req.body.title;
     book.author = req.body.author;
     book.available = req.body.available;
-    // Update other properties as needed  
     const updatedBook = await book.save();
     res.json(updatedBook);
   } catch (error) {

@@ -86,7 +86,6 @@ const BookEntry = () => {
     const handleToggleTransactionType = async (transactionId, currentType) => {
         const newType = currentType === 'borrowed' ? 'returned' : 'borrowed';
 
-        // Optimistically update the UI
         setTransactions(transactions.map(transaction =>
             transaction._id === transactionId
                 ? { ...transaction, transactionType: newType }
@@ -100,10 +99,9 @@ const BookEntry = () => {
                 },
             };
             await axios.put(`${process.env.REACT_APP_API_URL}transactions/toggle/${transactionId}`, { transactionType: newType }, config);
-            fetchTransactions(); // Re-fetch transactions to ensure sync with the server
+            fetchTransactions(); 
         } catch (error) {
             console.error('Error toggling transaction type:', error);
-            // Revert the UI update if the API call fails
             setTransactions(transactions.map(transaction =>
                 transaction._id === transactionId
                     ? { ...transaction, transactionType: currentType }
@@ -122,7 +120,7 @@ const BookEntry = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>S.No</TableCell>
-                            <TableCell style={{ width: '400px' }}>User</TableCell> {/* Adjust column width */}
+                            <TableCell style={{ width: '400px' }}>User</TableCell>
                             <TableCell>Transaction Date</TableCell>
                             <TableCell>Due Date</TableCell>
                             <TableCell>Transaction Type</TableCell>

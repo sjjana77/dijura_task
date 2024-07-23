@@ -24,12 +24,12 @@ const AddOrEditBook = () => {
     console.log(book);
   }, [book])
 
-  // Fetch the token from local storage
+  // Fetch token from local storage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
 
-    // Fetch book data if id is present (edit functionality)
+    // Fetch book data in edit functionality
     if (id) {
       setLoading(true);
       axios.get(`${process.env.REACT_APP_API_URL}books/${id}`, {
@@ -67,6 +67,8 @@ const AddOrEditBook = () => {
 
   }, [id, token]);
 
+
+  // Form Validation
   const validateForm = () => {
     let isValid = true;
     let errors = {};
@@ -125,7 +127,6 @@ const AddOrEditBook = () => {
     };
 
     if (id) {
-      // Edit book
       axios.put(`${process.env.REACT_APP_API_URL}books/${id}`, book, config)
         .then(response => {
           setLoading(false);
@@ -136,7 +137,6 @@ const AddOrEditBook = () => {
           setLoading(false);
         });
     } else {
-      // Add new book
       axios.post(`${process.env.REACT_APP_API_URL}books`, book, config)
         .then(response => {
           setLoading(false);
@@ -207,14 +207,6 @@ const AddOrEditBook = () => {
                 error={Boolean(errors.count)}
                 helperText={errors.count}
               />
-              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Due Date"
-                  value={book.due_date}
-                  onChange={handleDateChange}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                />
-              </LocalizationProvider> */}
             </Grid>
             <Grid item xs={6}>
               <Button

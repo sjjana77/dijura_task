@@ -42,19 +42,15 @@ export default function Dashboard() {
             </h3>
             <Grid container spacing={2}>
                 <Grid item xs={6} style={{ marginBottom: '20px' }}>
-                    {/* <Paper>Column 1</Paper> */}
                     <Incomedash month={month} />
                 </Grid>
                 <Grid item xs={6} style={{ marginBottom: '20px' }}>
-                    {/* <Paper>Column 2</Paper> */}
                     <Expensedash month={month} />
                 </Grid>
                 <Grid item xs={6}>
-                    {/* <Paper>Column 2</Paper> */}
                     <ExpenseCategorydash month={month} />
                 </Grid>
                 <Grid item xs={6}>
-                    {/* <Paper>Column 2</Paper> */}
                     <IncomeCategorydash month={month} />
                 </Grid>
             </Grid>

@@ -29,7 +29,7 @@ export default function Register() {
     };
 
     const validatePhoneNumber = (phone) => {
-        const phoneRegex = /^\d{10}$/; // Validates a 10-digit phone number
+        const phoneRegex = /^\d{10}$/;
         return phoneRegex.test(phone);
     };
 
@@ -89,7 +89,6 @@ export default function Register() {
             newErrors.password = '';
         }
 
-        // Set the updated errors state
         setErrors(newErrors);
 
         if (formValid) {
@@ -115,13 +114,11 @@ export default function Register() {
                 }
             } catch (error) {
                 if (error.response) {
-                    // If the server responded with a status code outside of the 2xx range
                     setErrors((prevErrors) => ({
                         ...prevErrors,
                         register_status: `Failed to register: ${error.response.data.message || 'Unknown error'}`
                     }));
                 } else {
-                    // If the request was made but no response was received or some other error occurred
                     setErrors((prevErrors) => ({
                         ...prevErrors,
                         register_status: `Failed to register: ${error.message}`

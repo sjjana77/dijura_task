@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import BookIcon from '@mui/icons-material/Book'; // Import Book icon
+import BookIcon from '@mui/icons-material/Book';
 
 const BookCatalog = () => {
   const [books, setBooks] = useState([]);
@@ -28,11 +28,10 @@ const BookCatalog = () => {
       };
       const response = await axios.get(`${process.env.REACT_APP_API_URL}books`, config);
       setBooks(response.data);
-      setFilteredBooks(response.data); // Initialize filtered books with all books
+      setFilteredBooks(response.data);
     } catch (error) {
       console.error('Error fetching books:', error);
       if (error.response && error.response.status === 401) {
-        // Unauthorized, redirect to login
         navigate('/react_task/');
       }
     }
@@ -65,7 +64,6 @@ const BookCatalog = () => {
     } catch (error) {
       console.error('Error removing book:', error);
       if (error.response && error.response.status === 403) {
-        // Forbidden, user doesn't have permission
         alert('You do not have permission to remove books.');
       }
     }

@@ -66,7 +66,7 @@ export default function Login() {
             } catch (error) {
                 const errorMessage = error.response?.data?.error || 'An unexpected error occurred';
                 setErrors((prevErrors) => ({ ...prevErrors, server: errorMessage }));
-                console.error('Login error:', error); // Debug log
+                console.error('Login error:', error);
             }
         }
     };

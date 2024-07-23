@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom';
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
     const { token, user } = useSelector((state) => state.auth);
-    const { userId: paramUserId } = useParams(); // Get userId from URL parameters
-    const userId = paramUserId || user.id; // Use paramUserId if available, otherwise use user.id from Redux store
+    const { userId: paramUserId } = useParams();
+    const userId = paramUserId || user.id;
 
     useEffect(() => {
         fetchTransactions();

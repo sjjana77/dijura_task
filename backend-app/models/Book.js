@@ -13,9 +13,9 @@ const bookSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  count: {  // Added field for count
+  count: {
     type: Number,
-    default: 0  // Default value is 0 if no count is assigned
+    default: 0
   }
 });
 

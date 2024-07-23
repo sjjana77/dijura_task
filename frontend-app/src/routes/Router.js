@@ -7,8 +7,8 @@ import Register from '../components/Register';
 import BookCatalog from '../components/BookCatalog';
 import AddOrEditBook from '../components/AddOrEditBook';
 import BookEntry from '../components/BookEntry';
-import Transactions from '../components/Transactions'; // Import the Transactions component
-import ProtectedRoute from '../routes/ProtectedRoute'; // Import the ProtectedRoute component
+import Transactions from '../components/Transactions';
+import ProtectedRoute from '../routes/ProtectedRoute';
 
 const Router = () => {
   return (
