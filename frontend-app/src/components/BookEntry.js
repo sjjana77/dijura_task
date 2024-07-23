@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, IconButton, Switch, TextField, Table, TableBody, TableCell, TableHead, TableRow, Select, MenuItem } from '@mui/material';
+import { Container, Typography, Paper, Button, TextField, Table, TableBody, TableCell, TableHead, TableRow, Select, MenuItem, Switch } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
 
 const BookEntry = () => {
     const [transactions, setTransactions] = useState([]);
@@ -132,13 +131,13 @@ const BookEntry = () => {
         <Container maxWidth="md" style={{ padding: '20px' }}>
             <Paper style={{ padding: '20px' }}>
                 <Typography variant="h4" gutterBottom>
-                    Manage {book.title + " by " + book.author}Book Transactions
+                    Manage {book.title + " by " + book.author} Book Transactions
                 </Typography>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>S.No</TableCell>
-                            <TableCell>User</TableCell>
+                            <TableCell style={{ width: '400px' }}>User</TableCell> {/* Adjust column width */}
                             <TableCell>Transaction Date</TableCell>
                             <TableCell>Due Date</TableCell>
                             <TableCell>Transaction Type</TableCell>
@@ -204,9 +203,15 @@ const BookEntry = () => {
                                 </Select>
                             </TableCell>
                             <TableCell>
-                                <IconButton edge="end" aria-label="add" onClick={handleAddTransaction} disabled={isAddDisabled}>
-                                    <AddIcon />
-                                </IconButton>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleAddTransaction}
+                                    disabled={isAddDisabled}
+                                    fullWidth
+                                >
+                                    Add Entry
+                                </Button>
                             </TableCell>
                         </TableRow>
                     </TableBody>

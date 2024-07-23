@@ -71,6 +71,10 @@ const BookCatalog = () => {
     }
   };
 
+  const handleListItemClick = (bookId) => {
+    navigate(`/react_task/books/borrow-return/${bookId}`);
+  };
+
   return (
     <Container maxWidth="md" style={{ padding: '20px' }}>
       <Paper style={{ padding: '20px' }}>
@@ -106,26 +110,26 @@ const BookCatalog = () => {
           {filteredBooks.map((book) => (
             <ListItem
               key={book._id}
-              secondaryAction={
-                userRole === 'admin' && (
-                  <>
-                    <IconButton edge="end" aria-label="edit" onClick={() => navigate(`/react_task/books/edit/${book._id}`)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveBook(book._id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="borrow-return" onClick={() => navigate(`/react_task/books/borrow-return/${book._id}`)}>
-                      <BookIcon />
-                    </IconButton>
-                  </>
-                )
-              }
+              onClick={() => handleListItemClick(book._id)}
+              style={{ cursor: 'pointer' }}
             >
               <ListItemText
                 primary={`${book.title} by ${book.author}`}
                 secondary={book.available ? 'Available' : 'Unavailable'}
               />
+              {userRole === 'admin' && (
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="edit" onClick={(e) => { e.stopPropagation(); navigate(`/react_task/books/edit/${book._id}`); }}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="delete" onClick={(e) => { e.stopPropagation(); handleRemoveBook(book._id); }}>
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="borrow-return" onClick={(e) => { e.stopPropagation(); navigate(`/react_task/books/borrow-return/${book._id}`); }}>
+                    <BookIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )}
             </ListItem>
           ))}
         </List>

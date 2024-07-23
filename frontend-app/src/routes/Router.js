@@ -27,6 +27,15 @@ const Router = () => {
             }
           />
           <Route
+            path="/react_task/register_user"
+            element={
+              <ProtectedRoute>
+                <Header />
+                <Register />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/react_task/books/add"
             element={
               <ProtectedRoute adminOnly={true}>

@@ -13,6 +13,6 @@ router.delete('/:id', isAdmin, bookController.deleteBook);
 
 // Public routes
 router.get('/', bookController.getAllBooks);
-// router.get('/:id', bookController.getBookById); //unwanted
+router.get('/:id', bookController.getBookById);
 
 module.exports = router;

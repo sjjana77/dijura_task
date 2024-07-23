@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearAuthToken } from '../slices/authSlice';
 
@@ -24,7 +24,6 @@ export default function Header() {
         </Typography>
         {isAuthenticated ? (
           <>
-
             <Button
               color="inherit"
               component={Link}
@@ -43,14 +42,27 @@ export default function Header() {
             </Button>
             <Button
               color="inherit"
+              component={Link}
+              to="/react_task/register_user"
+              sx={{ border: '1px solid #fff', marginRight: '20px' }}
+            >
+              Register
+            </Button>
+            <Button
+              color="inherit"
               sx={{ border: '1px solid #fff' }}
               onClick={handleLogout}
             >
               Logout
             </Button>
-            <Typography variant="h6" sx={{ marginRight: '20px' }}>
-              {user.username} ({user.role})
-            </Typography>
+            <Box sx={{ textAlign: 'right', marginLeft: '20px' }}>
+              <Typography variant="h6" sx={{ fontSize: '1rem' }}>
+                {user.username}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
+                {user.role == "admin" ? "Admin" : "Reader"}
+              </Typography>
+            </Box>
           </>
         ) : (
           <>
