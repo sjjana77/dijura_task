@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Typography, Button, Grid, TextField, MenuItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Register() {
@@ -203,7 +203,16 @@ export default function Register() {
                 {errors.register_status && <div className="error-message">{errors.register_status}</div>}
                 <Grid container spacing={2}>
                     <Grid item xs={7}>
-                        <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, float: 'right' }}>
+                        <Button
+                            component={Link}
+                            to="/react_task/"
+                            variant="contained"
+                            color="primary"
+                            style={{ marginTop: 16, marginBottom: 16, float: 'right' }}
+                        >
+                            Login
+                        </Button>
+                        <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, float: 'right', marginRight: 16 }}>
                             Register
                         </Button>
                     </Grid>

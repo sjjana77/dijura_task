@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { 
-  createTransaction, 
-  getTransactions, 
-  getTransactionById, 
-  getTransactionsByUserId, 
-  getTransactionsByBookIdAndBorrowed, 
-  handleToggleTransactionType 
+const {
+  createTransaction,
+  getTransactions,
+  getTransactionById,
+  getTransactionsByUserId,
+  getTransactionsByBookIdAndBorrowed,
+  handleToggleTransactionType
 } = require('../controllers/transactionController');
 
 // Route for creating a new transaction
 router.post('/create', createTransaction);
 
 // Route for getting all transactions
-router.get('/', getTransactions);
+router.get('/', getTransactions); //unwanted
 
 // Route for getting a transaction by ID
-router.get('/:id', getTransactionById);
+router.get('/:id', getTransactionById); //unwanted
 
 // Route for getting transactions by user ID
 router.get('/user/:userId', getTransactionsByUserId);

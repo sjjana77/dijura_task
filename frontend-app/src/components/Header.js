@@ -24,16 +24,28 @@ export default function Header() {
         </Typography>
         {isAuthenticated ? (
           <>
-            {user.role === 'admin' ? (
-              <Button color="inherit" component={Link} to="/react_task/books" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
-                Books
-              </Button>
-            ) : (
-              <Button color="inherit" component={Link} to="/react_task/books_catalog" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
-                Books Catalog
-              </Button>
-            )}
-            <Button color="inherit" sx={{ border: '1px solid #fff' }} onClick={handleLogout}>
+
+            <Button
+              color="inherit"
+              component={Link}
+              to="/react_task/books_catalog"
+              sx={{ border: '1px solid #fff', marginRight: '20px' }}
+            >
+              Books Catalog
+            </Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/react_task/transactions"
+              sx={{ border: '1px solid #fff', marginRight: '20px' }}
+            >
+              Transactions
+            </Button>
+            <Button
+              color="inherit"
+              sx={{ border: '1px solid #fff' }}
+              onClick={handleLogout}
+            >
               Logout
             </Button>
             <Typography variant="h6" sx={{ marginRight: '20px' }}>
@@ -42,10 +54,20 @@ export default function Header() {
           </>
         ) : (
           <>
-            <Button color="inherit" component={Link} to="/react_task/login" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/react_task/"
+              sx={{ border: '1px solid #fff', marginRight: '20px' }}
+            >
               Login
             </Button>
-            <Button color="inherit" component={Link} to="/react_task/register" sx={{ border: '1px solid #fff' }}>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/react_task/register"
+              sx={{ border: '1px solid #fff' }}
+            >
               Register
             </Button>
           </>

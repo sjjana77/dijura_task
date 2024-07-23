@@ -1,6 +1,6 @@
-const express = require('express');  
-const router = express.Router();  
-const bookController = require('../controllers/bookController');  
+const express = require('express');
+const router = express.Router();
+const bookController = require('../controllers/bookController');
 const { verifyToken, isAdmin } = require('../middleware/auth');
 
 // Middleware to verify JWT token
@@ -13,6 +13,6 @@ router.delete('/:id', isAdmin, bookController.deleteBook);
 
 // Public routes
 router.get('/', bookController.getAllBooks);
-router.get('/:id', bookController.getBookById);
+router.get('/:id', bookController.getBookById); //unwanted
 
 module.exports = router;

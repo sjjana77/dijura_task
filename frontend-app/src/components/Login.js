@@ -1,8 +1,8 @@
 // src/components/Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Grid, TextField } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuthToken } from '../slices/authSlice';
 import axiosInstance from '../axiosConfig';
@@ -63,7 +63,7 @@ export default function Login() {
                 dispatch(setAuthToken({ token, user }));
 
                 setErrors((prevErrors) => ({ ...prevErrors, server: '' }));
-                navigate('/react_task/books/');
+                navigate('/react_task/books_catalog/');
             } catch (error) {
                 const errorMessage = error.response?.data?.error || 'An unexpected error occurred';
                 setErrors((prevErrors) => ({ ...prevErrors, server: errorMessage }));
@@ -71,6 +71,10 @@ export default function Login() {
             }
         }
     };
+
+    useEffect(() => {
+        localStorage.clear();
+    }, [])
 
     return (
         <Container maxWidth="sm">
@@ -110,9 +114,19 @@ export default function Login() {
                             </Typography>
                         )}
 
-                        <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, float: 'right' }}>
+                        <Button
+                            component={Link}
+                            to="/react_task/register/"
+                            variant="contained"
+                            color="primary"
+                            style={{ marginTop: 16, marginBottom: 16, float: 'right' }}
+                        >
+                            Register
+                        </Button>
+                        <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, float: 'right', marginRight: 16 }}>
                             Login
                         </Button>
+
                     </Grid>
                 </Grid>
             </form>

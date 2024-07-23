@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import BookIcon from '@mui/icons-material/Book'; // Import Book icon
 
-const Book = () => {
+const BookCatalog = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,4 +134,4 @@ const Book = () => {
   );
 };
 
-export default Book;
+export default BookCatalog;

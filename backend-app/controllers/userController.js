@@ -1,13 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Users = require('../models/user_model');
+const User = require('../models/user_model');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET; // You should use an environment variable for this
 
 async function getUsers(req, res) {
   try {
-    const users = await Users.find();
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     res.status(201).json({ error: error.message });
@@ -18,14 +18,14 @@ async function register(req, res) {
   const { name, email_id, mobile, role, password } = req.body;
 
   try {
-    const existingUser = await Users.findOne({ email: email_id });
+    const existingUser = await User.findOne({ email: email_id });
     if (existingUser) {
       return res.status(203).json({ error: 'Email already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new Users({
+    const newUser = new User({
       username: name,
       email: email_id,
       mobile,
@@ -51,7 +51,7 @@ async function login(req, res) {
   const { email_id, password } = req.body;
 
   try {
-    const user = await Users.findOne({ email: email_id });
+    const user = await User.findOne({ email: email_id });
     if (!user) {
       return res.status(201).json({ error: 'Invalid email or password' });
     }
@@ -81,6 +81,7 @@ async function login(req, res) {
     res.status(201).json({ error: error.message });
   }
 }
+
 
 module.exports = {
   getUsers,

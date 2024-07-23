@@ -21,9 +21,9 @@ const AddOrEditBook = () => {
     author: ''
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(book);
-  },[book])
+  }, [book])
 
   // Fetch the token from local storage
   const token = localStorage.getItem('token');
@@ -102,19 +102,24 @@ const AddOrEditBook = () => {
       isValid = false;
     }
 
+    if (book.count < 1) {
+      errors.count = 'Count should be atleast 1';
+      isValid = false;
+    }
+
     setErrors(errors);
     return isValid;
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if(name == "user_id" && value != ""){
+    if (name == "user_id" && value != "") {
       setBook(prevState => ({
         ...prevState,
         [name]: value, available: false
       }));
     }
-    else{
+    else {
       setBook(prevState => ({
         ...prevState,
         [name]: type === 'checkbox' ? checked : value
@@ -146,7 +151,7 @@ const AddOrEditBook = () => {
       axios.put(`${process.env.REACT_APP_API_URL}books/${id}`, book, config)
         .then(response => {
           setLoading(false);
-          navigate('/react_task/books');
+          navigate('/react_task/books_catalog');
         })
         .catch(error => {
           setError('Error updating book');
@@ -157,7 +162,7 @@ const AddOrEditBook = () => {
       axios.post(`${process.env.REACT_APP_API_URL}books`, book, config)
         .then(response => {
           setLoading(false);
-          navigate('/react_task/books');
+          navigate('/react_task/books_catalog');
         })
         .catch(error => {
           setError('Error adding book');
@@ -247,7 +252,7 @@ const AddOrEditBook = () => {
             <Grid item xs={6}>
               <Button
                 component={Link}
-                to="/react_task/books/"
+                to="/react_task/books_catalog/"
                 variant="contained"
                 color="primary"
                 style={{ marginTop: '16px' }}

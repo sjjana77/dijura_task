@@ -80,6 +80,7 @@ exports.getTransactionsByUserId = async (req, res) => {
 
   try {
     const transactions = await Transaction.find({ userId })
+      .populate('userId', 'username')
       .populate('bookId', 'title author'); // Populate book details
 
 
@@ -162,7 +163,8 @@ const updateBookAvailability = async (bookId) => {
   }
 
   // Update the availability of the book
-  // console.log(book);
-  book.available = book.count >= transactions.length;
+  // console.log(book.count);
+  // console.log(transactions.length);
+  book.available = book.count > transactions.length;
   await book.save();
 };
