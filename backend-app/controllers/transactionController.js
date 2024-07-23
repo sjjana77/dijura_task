@@ -95,7 +95,7 @@ exports.handleToggleTransactionType = async (req, res) => {
     }
 
     
-    transaction.transactionType = transactionType;
+    transaction.transactionType = transactionType; 
     
     if (transactionType === 'returned') {
       transaction.returnedDate = new Date();
