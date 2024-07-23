@@ -94,17 +94,17 @@ exports.handleToggleTransactionType = async (req, res) => {
       return res.status(404).json({ error: 'Transaction not found' });
     }
 
-    await updateBookAvailability(transaction.bookId);
-
+    
     transaction.transactionType = transactionType;
-
+    
     if (transactionType === 'returned') {
       transaction.returnedDate = new Date();
     } else {
       transaction.returnedDate = null;
     }
-
+    
     await transaction.save();
+    await updateBookAvailability(transaction.bookId);
 
     res.json({ message: 'Transaction updated successfully', transaction });
   } catch (error) {
@@ -120,6 +120,7 @@ const updateBookAvailability = async (bookId) => {
     throw new Error('Book not found');
   }
 
+  // console.log(book.count > transactions.length);
   book.available = book.count > transactions.length;
-  await book.save();
+  await book.save(); 
 };
