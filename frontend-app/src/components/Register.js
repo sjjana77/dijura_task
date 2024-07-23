@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Container, AppBar, Toolbar, Typography, Button, Grid } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, TextField, MenuItem } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Typography, Button, Grid, TextField, MenuItem } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Register() {
@@ -20,7 +19,8 @@ export default function Register() {
         email_id: '',
         role: '',
         mobile: '',
-        password: ''
+        password: '',
+        register_status: ''
     });
 
     const validateEmail = (email) => {
@@ -46,7 +46,6 @@ export default function Register() {
         const newErrors = { ...errors };
 
         if (!registerData.name) {
-            console.log("Name is required");
             newErrors.name = 'Name is required';
             formValid = false;
         } else {
@@ -95,20 +94,40 @@ export default function Register() {
 
         if (formValid) {
             try {
-                await axios.post(`${process.env.REACT_APP_API_URL}users/register`, registerData);
-                // Clear the form
-                setRegisterData({
-                    name: '',
-                    email_id: '',
-                    mobile: '',
-                    role: '',
-                    password: ''
-                });
-                navigate('/react_task/');
-            } catch (error) {
-                console.error('Failed to update expense:', error);
-            }
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}users/register`, registerData);
 
+                if (response.status === 200) {
+                    // Clear the form
+                    setRegisterData({
+                        name: '',
+                        email_id: '',
+                        mobile: '',
+                        role: '',
+                        password: ''
+                    });
+                    navigate('/react_task/');
+                } else {
+                    console.log(response);
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        register_status: response.data.error
+                    }));
+                }
+            } catch (error) {
+                if (error.response) {
+                    // If the server responded with a status code outside of the 2xx range
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        register_status: `Failed to register: ${error.response.data.message || 'Unknown error'}`
+                    }));
+                } else {
+                    // If the request was made but no response was received or some other error occurred
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        register_status: `Failed to register: ${error.message}`
+                    }));
+                }
+            }
         }
     };
 
@@ -181,15 +200,15 @@ export default function Register() {
                     helperText={errors.password}
                     variant="outlined"
                 />
+                {errors.register_status && <div className="error-message">{errors.register_status}</div>}
                 <Grid container spacing={2}>
                     <Grid item xs={7}>
                         <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16, marginBottom: 16, float: 'right' }}>
                             Register
                         </Button>
-
                     </Grid>
                 </Grid>
             </form>
         </Container>
-    )
+    );
 }

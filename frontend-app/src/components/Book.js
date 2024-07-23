@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Paper, Grid } from '@mui/material';
+import { Container, Typography, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Paper, Grid, TextField } from '@mui/material';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -9,11 +9,8 @@ import BookIcon from '@mui/icons-material/Book'; // Import Book icon
 
 const Book = () => {
   const [books, setBooks] = useState([]);
-  const [newBook, setNewBook] = useState({
-    title: '',
-    author: '',
-    available: true,
-  });
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { token, user } = useSelector((state) => state.auth);
   const userRole = user?.role;
@@ -31,6 +28,7 @@ const Book = () => {
       };
       const response = await axios.get(`${process.env.REACT_APP_API_URL}books`, config);
       setBooks(response.data);
+      setFilteredBooks(response.data); // Initialize filtered books with all books
     } catch (error) {
       console.error('Error fetching books:', error);
       if (error.response && error.response.status === 401) {
@@ -40,28 +38,19 @@ const Book = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewBook({ ...newBook, [name]: value });
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    filterBooks(query);
   };
 
-  const handleAddBook = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.post(`${process.env.REACT_APP_API_URL}books`, newBook, config);
-      setNewBook({ title: '', author: '', available: true });
-      fetchBooks();
-    } catch (error) {
-      console.error('Error adding book:', error);
-      if (error.response && error.response.status === 403) {
-        // Forbidden, user doesn't have permission
-        alert('You do not have permission to add books.');
-      }
-    }
+  const filterBooks = (query) => {
+    const filtered = books.filter(
+      (book) =>
+        book.title.toLowerCase().includes(query) ||
+        book.author.toLowerCase().includes(query)
+    );
+    setFilteredBooks(filtered);
   };
 
   const handleRemoveBook = async (bookId) => {
@@ -105,8 +94,16 @@ const Book = () => {
             )}
           </Grid>
         </Grid>
+        <TextField
+          fullWidth
+          label="Search Books"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          margin="normal"
+          variant="outlined"
+        />
         <List>
-          {books.map((book) => (
+          {filteredBooks.map((book) => (
             <ListItem
               key={book._id}
               secondaryAction={

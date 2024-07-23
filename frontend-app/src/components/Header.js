@@ -1,20 +1,56 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearAuthToken } from '../slices/authSlice';
 
-const Header = () => {
+export default function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(clearAuthToken());
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/react_task');
+  };
+
   return (
-    <AppBar position="static" sx={{ marginBottom: '20px' }}>
+    <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Anhas MERN Stack Task - Janardh
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          Dijura MERN Stack - Janardh
         </Typography>
-        <Button component={Link} to="/react_task/" color="inherit" sx={{ border: '1px solid #fff', marginRight: '8px' }}>Login</Button>
-        <Button component={Link} to="/react_task/register" color="inherit" sx={{ border: '1px solid #fff', marginRight: '8px' }}>Register</Button>
-        <Button component={Link} to="/react_task/transactions" color="inherit" sx={{ border: '1px solid #fff', marginRight: '8px' }}>Transactions</Button>
+        {isAuthenticated ? (
+          <>
+            {user.role === 'admin' ? (
+              <Button color="inherit" component={Link} to="/react_task/books" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
+                Books
+              </Button>
+            ) : (
+              <Button color="inherit" component={Link} to="/react_task/books_catalog" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
+                Books Catalog
+              </Button>
+            )}
+            <Button color="inherit" sx={{ border: '1px solid #fff' }} onClick={handleLogout}>
+              Logout
+            </Button>
+            <Typography variant="h6" sx={{ marginRight: '20px' }}>
+              {user.username} ({user.role})
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Button color="inherit" component={Link} to="/react_task/login" sx={{ border: '1px solid #fff', marginRight: '20px' }}>
+              Login
+            </Button>
+            <Button color="inherit" component={Link} to="/react_task/register" sx={{ border: '1px solid #fff' }}>
+              Register
+            </Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );
-};
-
-export default Header;
+}

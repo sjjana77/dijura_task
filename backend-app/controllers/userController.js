@@ -20,7 +20,7 @@ async function register(req, res) {
   try {
     const existingUser = await Users.findOne({ email: email_id });
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already exists' });
+      return res.status(203).json({ error: 'Email already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

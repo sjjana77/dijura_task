@@ -50,7 +50,7 @@ const BookEntry = () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}transactions/bookId/${bookId}/transactionType/borrowed`, config);
             setTransactions(response.data.transactions);
             setBookCount(response.data.book.count);
-            setBook({title: response.data.book.title, author: response.data.book.author});
+            setBook({ title: response.data.book.title, author: response.data.book.author });
         } catch (error) {
             console.error('Error fetching transactions:', error);
         }
@@ -132,7 +132,7 @@ const BookEntry = () => {
         <Container maxWidth="md" style={{ padding: '20px' }}>
             <Paper style={{ padding: '20px' }}>
                 <Typography variant="h4" gutterBottom>
-                    Manage {book.title+" by "+book.author}Book Transactions
+                    Manage {book.title + " by " + book.author}Book Transactions
                 </Typography>
                 <Table>
                     <TableHead>
@@ -164,7 +164,7 @@ const BookEntry = () => {
                             </TableRow>
                         ))}
                         <TableRow>
-                            <TableCell>Add New</TableCell>
+                            <TableCell>Issue Entry</TableCell>
                             <TableCell>
                                 <Select
                                     value={newTransaction.userId}
