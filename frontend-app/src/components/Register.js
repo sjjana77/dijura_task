@@ -182,8 +182,8 @@ export default function Register() {
                     helperText={errors.role}
                     variant="outlined"
                 >
-                    <MenuItem key="user" value="user">User</MenuItem>
                     <MenuItem key="admin" value="admin">Admin</MenuItem>
+                    <MenuItem key="reader" value="reader">Reader</MenuItem>
                 </TextField>
                 <TextField
                     fullWidth

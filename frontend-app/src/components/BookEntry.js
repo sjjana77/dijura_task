@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Paper, Button, TextField, Table, TableBody, TableCell, TableHead, TableRow, Select, MenuItem, Switch } from '@mui/material';
+import { Container, Typography, Paper, Button, TextField, Select, MenuItem, Switch, Grid } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -99,7 +99,7 @@ const BookEntry = () => {
                 },
             };
             await axios.put(`${process.env.REACT_APP_API_URL}transactions/toggle/${transactionId}`, { transactionType: newType }, config);
-            fetchTransactions(); 
+            fetchTransactions();
         } catch (error) {
             console.error('Error toggling transaction type:', error);
             setTransactions(transactions.map(transaction =>
@@ -116,90 +116,92 @@ const BookEntry = () => {
                 <Typography variant="h4" gutterBottom>
                     Manage {book.title + " by " + book.author} Book Transactions
                 </Typography>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>S.No</TableCell>
-                            <TableCell style={{ width: '400px' }}>User</TableCell>
-                            <TableCell>Transaction Date</TableCell>
-                            <TableCell>Due Date</TableCell>
-                            <TableCell>Transaction Type</TableCell>
-                            <TableCell>Return Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
+                <Grid container spacing={2} style={{ marginTop: '4px' }}>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2} alignItems="center" style={{ fontWeight: 'bold' }}>
+                            <Grid item xs={1}>#</Grid>
+                            <Grid item xs={3}>User</Grid>
+                            <Grid item xs={2}>Borrow Date</Grid>
+                            <Grid item xs={2}>Due Date</Grid>
+                            <Grid item xs={2}>Transaction Type</Grid>
+                            <Grid item xs={2}>Action</Grid>
+                        </Grid>
                         {transactions.map((transaction, index) => (
-                            <TableRow key={transaction._id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{transaction.username}</TableCell>
-                                <TableCell>{new Date(transaction.createdAt).toISOString().slice(0, 10)}</TableCell>
-                                <TableCell>{new Date(transaction.dueDate).toISOString().slice(0, 10)}</TableCell>
-                                <TableCell>
+                            <Grid container spacing={2} key={transaction._id} alignItems="center">
+                                <Grid item xs={1}>{index + 1}</Grid>
+                                <Grid item xs={3}>{transaction.username}</Grid>
+                                <Grid item xs={2}>{new Date(transaction.createdAt).toISOString().slice(0, 10)}</Grid>
+                                <Grid item xs={2}>{new Date(transaction.dueDate).toISOString().slice(0, 10)}</Grid>
+                                <Grid item xs={2}>
                                     {transaction.transactionType === 'borrowed' ? 'Borrowed' : 'Returned'}
-                                </TableCell>
-                                <TableCell>
+                                </Grid>
+                                <Grid item xs={2}>
                                     <Switch
                                         checked={transaction.transactionType === 'borrowed'}
                                         onChange={() => handleToggleTransactionType(transaction._id, transaction.transactionType)}
                                     />
-                                </TableCell>
-                            </TableRow>
+                                </Grid>
+                            </Grid>
                         ))}
-                        <TableRow>
-                            <TableCell>Issue Entry</TableCell>
-                            <TableCell>
-                                <Select
-                                    value={newTransaction.userId}
-                                    onChange={(e) => setNewTransaction({ ...newTransaction, userId: e.target.value })}
-                                    fullWidth
-                                >
-                                    {users.map(user => (
-                                        <MenuItem key={user._id} value={user._id}>{user.username}</MenuItem>
-                                    ))}
-                                </Select>
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="date"
-                                    value={getCurrentDate()}
-                                    fullWidth
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="date"
-                                    value={newTransaction.dueDate}
-                                    onChange={(e) => setNewTransaction({ ...newTransaction, dueDate: e.target.value })}
-                                    fullWidth
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Select
-                                    value={newTransaction.transactionType}
-                                    onChange={(e) => setNewTransaction({ ...newTransaction, transactionType: e.target.value })}
-                                    fullWidth
-                                >
-                                    <MenuItem value="borrowed">Borrow</MenuItem>
-                                </Select>
-                            </TableCell>
-                            <TableCell>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleAddTransaction}
-                                    disabled={isAddDisabled}
-                                    fullWidth
-                                >
-                                    Add Entry
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <Typography variant="h6" gutterBottom>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="h5" fontWeight="500">Issue Entry</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography fontWeight="400">Select User</Typography>
+                        <Select
+                            value={newTransaction.userId}
+                            onChange={(e) => setNewTransaction({ ...newTransaction, userId: e.target.value })}
+                            fullWidth
+                        >
+                            {users.map(user => (
+                                <MenuItem key={user._id} value={user._id}>{user.username}</MenuItem>
+                            ))}
+                        </Select>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography fontWeight="400">Borrow Date</Typography>
+                        <TextField
+                            type="date"
+                            value={getCurrentDate()}
+                            fullWidth
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography fontWeight="400">Due Date</Typography>
+                        <TextField
+                            type="date"
+                            value={newTransaction.dueDate}
+                            onChange={(e) => setNewTransaction({ ...newTransaction, dueDate: e.target.value })}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography fontWeight="400">Transaction Type</Typography>
+                        <Select
+                            value={newTransaction.transactionType}
+                            onChange={(e) => setNewTransaction({ ...newTransaction, transactionType: e.target.value })}
+                            fullWidth
+                        >
+                            <MenuItem value="borrowed">Borrow</MenuItem>
+                        </Select>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleAddTransaction}
+                            disabled={isAddDisabled}
+                            fullWidth
+                        >
+                            Add Entry
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
                     Available Books: {availableBooks}
                 </Typography>
             </Paper>
