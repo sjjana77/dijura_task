@@ -1,6 +1,4 @@
 const Book = require('../models/Book');
-const Transaction = require('../models/Transaction');
-const User = require('../models/user_model');
 
 exports.getAllBooks = async (req, res) => {
   try {

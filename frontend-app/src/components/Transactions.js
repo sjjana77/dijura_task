@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, List, ListItem, ListItemText, Paper, Grid } from '@mui/material';
+import { Container, Paper, Typography } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import TransactionSummary from './TransactionSummary';
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -34,28 +35,7 @@ const Transactions = () => {
                 <Typography variant="h4" gutterBottom>
                     Transactions {transactions && transactions.length > 0 ? ' - ' + transactions[0].userId.username : ''}
                 </Typography>
-                <List>
-                    {transactions.map((transaction) => (
-                        <ListItem key={transaction._id}>
-                            <Grid container alignItems="center">
-                                <Grid item xs={8}>
-                                    <ListItemText
-                                        primary={`Book: ${transaction.bookId.title} by ${transaction.bookId.author}`}
-                                        secondary={`Borrowed: ${new Date(transaction.createdAt).toLocaleString()}`}
-                                    />
-                                </Grid>
-                                <Grid item xs={4} container direction="column" alignItems="flex-end">
-                                    <Typography variant="body2" color="textSecondary">
-                                        Due Date: {new Date(transaction.dueDate).toLocaleString()}
-                                    </Typography>
-                                    <Typography variant="body2" color={transaction.returnedDate ? "textSecondary" : "error"}>
-                                        {transaction.returnedDate ? `Returned: ${new Date(transaction.returnedDate).toLocaleString()}` : 'Return: Pending'}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                    ))}
-                </List>
+                <TransactionSummary transactions={transactions} /> 
             </Paper>
         </Container>
     );

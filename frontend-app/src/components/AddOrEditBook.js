@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch } from '@mui/material';
-
+import { Container, Typography, Grid, Paper, Button } from '@mui/material';
+import BookForm from './BookForm';
+import FormError from './FormError';
+import LoadingButton from './LoadingButton';
 
 const AddOrEditBook = () => {
   const { id } = useParams();
@@ -17,19 +19,14 @@ const AddOrEditBook = () => {
   const [error, setError] = useState('');
   const [errors, setErrors] = useState({
     title: '',
-    author: ''
+    author: '',
+    count: ''
   });
-
-  useEffect(() => {
-    console.log(book);
-  }, [book])
 
   // Fetch token from local storage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-
-    // Fetch book data in edit functionality
     if (id) {
       setLoading(true);
       axios.get(`${process.env.REACT_APP_API_URL}books/${id}`, {
@@ -52,21 +49,19 @@ const AddOrEditBook = () => {
                   due_date: response.data.dueDate ? new Date(response.data.dueDate) : null
                 }));
               })
-              .catch(error => {
+              .catch(() => {
                 setError('Error fetching transaction details');
                 setLoading(false);
               });
           }
           setLoading(false);
         })
-        .catch(error => {
+        .catch(() => {
           setError('Error fetching book details');
           setLoading(false);
         });
     }
-
   }, [id, token]);
-
 
   // Form Validation
   const validateForm = () => {
@@ -89,7 +84,7 @@ const AddOrEditBook = () => {
     }
 
     if (book.count < 1) {
-      errors.count = 'Count should be atleast 1';
+      errors.count = 'Count should be at least 1';
       isValid = false;
     }
 
@@ -104,16 +99,13 @@ const AddOrEditBook = () => {
         ...prevState,
         [name]: value, available: false
       }));
-    }
-    else {
+    } else {
       setBook(prevState => ({
         ...prevState,
         [name]: type === 'checkbox' ? checked : value
       }));
-
     }
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,27 +118,19 @@ const AddOrEditBook = () => {
       }
     };
 
-    if (id) {
-      axios.put(`${process.env.REACT_APP_API_URL}books/${id}`, book, config)
-        .then(response => {
-          setLoading(false);
-          navigate('/react_task/books_catalog');
-        })
-        .catch(error => {
-          setError('Error updating book');
-          setLoading(false);
-        });
-    } else {
-      axios.post(`${process.env.REACT_APP_API_URL}books`, book, config)
-        .then(response => {
-          setLoading(false);
-          navigate('/react_task/books_catalog');
-        })
-        .catch(error => {
-          setError('Error adding book');
-          setLoading(false);
-        });
-    }
+    const request = id
+      ? axios.put(`${process.env.REACT_APP_API_URL}books/${id}`, book, config)
+      : axios.post(`${process.env.REACT_APP_API_URL}books`, book, config);
+
+    request
+      .then(() => {
+        setLoading(false);
+        navigate('/react_task/books_catalog');
+      })
+      .catch(() => {
+        setError(id ? 'Error updating book' : 'Error adding book');
+        setLoading(false);
+      });
   };
 
   return (
@@ -155,69 +139,15 @@ const AddOrEditBook = () => {
         <Typography variant="h5" gutterBottom>
           {id ? 'Edit Book' : 'Add Book'}
         </Typography>
-        {error && <Typography color="error">{error}</Typography>}
+        <FormError error={error} />
         <form onSubmit={handleSubmit}>
+          <BookForm book={book} errors={errors} handleChange={handleChange} />
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Title"
-                name="title"
-                value={book.title}
-                onChange={handleChange}
-                variant="outlined"
-                error={Boolean(errors.title)}
-                helperText={errors.title}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Author"
-                name="author"
-                value={book.author}
-                onChange={handleChange}
-                variant="outlined"
-                error={Boolean(errors.author)}
-                helperText={errors.author}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    name="available"
-                    checked={book.available}
-                    onChange={handleChange}
-                    color="primary"
-                  />
-                }
-                label="Available"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type='number'
-                fullWidth
-                label="Count"
-                name="count"
-                value={book.count}
-                onChange={handleChange}
-                variant="outlined"
-                error={Boolean(errors.count)}
-                helperText={errors.count}
-              />
-            </Grid>
             <Grid item xs={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                style={{ marginTop: '16px' }}
-              >
-                {loading ? <CircularProgress size={24} /> : id ? 'Update Book' : 'Add Book'}
-              </Button>
+              <LoadingButton
+                loading={loading}
+                text={id ? 'Update Book' : 'Add Book'}
+              />
             </Grid>
             <Grid item xs={6}>
               <Button

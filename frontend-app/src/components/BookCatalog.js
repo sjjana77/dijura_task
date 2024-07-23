@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Paper, Grid, TextField } from '@mui/material';
+import { Container, Typography, Button, Paper, Grid } from '@mui/material';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import BookIcon from '@mui/icons-material/Book';
+import BookList from './BookList';
+import SearchBar from './SearchBar';
 
 const BookCatalog = () => {
   const [books, setBooks] = useState([]);
@@ -69,10 +68,6 @@ const BookCatalog = () => {
     }
   };
 
-  const handleListItemClick = (bookId) => {
-    navigate(`/react_task/books/borrow-return/${bookId}`);
-  };
-
   return (
     <Container maxWidth="md" style={{ padding: '20px' }}>
       <Paper style={{ padding: '20px' }}>
@@ -96,41 +91,8 @@ const BookCatalog = () => {
             )}
           </Grid>
         </Grid>
-        <TextField
-          fullWidth
-          label="Search Books"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          margin="normal"
-          variant="outlined"
-        />
-        <List>
-          {filteredBooks.map((book) => (
-            <ListItem
-              key={book._id}
-              onClick={() => handleListItemClick(book._id)}
-              style={{ cursor: 'pointer' }}
-            >
-              <ListItemText
-                primary={`${book.title} by ${book.author}`}
-                secondary={book.available ? 'Available' : 'Unavailable'}
-              />
-              {userRole === 'admin' && (
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="edit" onClick={(e) => { e.stopPropagation(); navigate(`/react_task/books/edit/${book._id}`); }}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={(e) => { e.stopPropagation(); handleRemoveBook(book._id); }}>
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton edge="end" aria-label="borrow-return" onClick={(e) => { e.stopPropagation(); navigate(`/react_task/books/borrow-return/${book._id}`); }}>
-                    <BookIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              )}
-            </ListItem>
-          ))}
-        </List>
+        <SearchBar searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
+        <BookList books={filteredBooks} userRole={userRole} handleRemoveBook={handleRemoveBook} />
       </Paper>
     </Container>
   );
