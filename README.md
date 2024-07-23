@@ -9,25 +9,25 @@ Collections: Expenses, Users
 
 <h3>Screenshots:</h3>
 <h4>Register</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot1.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/register.jpg" />
 
 <h4>Login</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot2.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/login.jpg" />
 
 <h4>Admin Book Catalog</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot2.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/admin%20manage%20book%20transaction.jpg" />
 
 <h4>Reader Book Catalog</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot2.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/book%20catalog.jpg" />
 
 <h4>Add Book</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot2.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/add%20book.jpg" />
 
 <h4>Edit Book</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot3.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/edit%20book.jpg" />
 
 <h4>Manage Book Transactions(Issue/Return Book)</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot4.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/reader%20manage%20book%20transaction.jpg" />
 
 <h4>User Transactions</h4>
-<img  src="https://raw.githubusercontent.com/sjjana77/Anhas_Web_Task_Janardh/main/screenshots/screenshot4.jpg" />
+<img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/transactions.jpg" />
