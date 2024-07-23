@@ -6,10 +6,6 @@ function App() {
   return (
     <Provider store={store}>
       <Router />
-      {/* <div className="App">
-      <Transactions />
-      <TransactionForm />
-    </div> */}
     </Provider>
   );
 }
