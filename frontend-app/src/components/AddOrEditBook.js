@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch, MenuItem, Select, InputLabel, FormControl, InputAdornment } from '@mui/material';
+import { Container, Typography, TextField, Button, Grid, CircularProgress, Paper, FormControlLabel, Switch } from '@mui/material';
 
 
 const AddOrEditBook = () => {
@@ -14,7 +14,6 @@ const AddOrEditBook = () => {
     count: 1
   });
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [errors, setErrors] = useState({
     title: '',
@@ -29,21 +28,6 @@ const AddOrEditBook = () => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    // Fetch users for the dropdown
-    setLoading(true);
-    axios.get(`${process.env.REACT_APP_API_URL}users/get_users`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        setUsers(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError('Error fetching users');
-        setLoading(false);
-      });
 
     // Fetch book data if id is present (edit functionality)
     if (id) {
@@ -113,7 +97,7 @@ const AddOrEditBook = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name == "user_id" && value != "") {
+    if (name === "user_id" && value !== "") {
       setBook(prevState => ({
         ...prevState,
         [name]: value, available: false
@@ -128,12 +112,6 @@ const AddOrEditBook = () => {
     }
   };
 
-  const handleDateChange = (date) => {
-    setBook(prevState => ({
-      ...prevState,
-      due_date: date
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();

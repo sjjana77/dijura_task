@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Paper, Button, TextField, Table, TableBody, TableCell, TableHead, TableRow, Select, MenuItem, Switch } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const BookEntry = () => {
     const [transactions, setTransactions] = useState([]);
@@ -16,7 +16,6 @@ const BookEntry = () => {
     });
     const [availableBooks, setAvailableBooks] = useState(0);
     const [isAddDisabled, setIsAddDisabled] = useState(true);
-    const navigate = useNavigate();
     const { token } = useSelector((state) => state.auth);
     const { bookId } = useParams();
 
@@ -81,20 +80,6 @@ const BookEntry = () => {
             setNewTransaction({ userId: '', dueDate: '', transactionType: 'borrowed' });
         } catch (error) {
             console.error('Error adding transaction:', error);
-        }
-    };
-
-    const handleRemoveTransaction = async (transactionId) => {
-        try {
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            await axios.delete(`${process.env.REACT_APP_API_URL}transactions/${transactionId}`, config);
-            setTransactions(transactions.filter(transaction => transaction._id !== transactionId));
-        } catch (error) {
-            console.error('Error removing transaction:', error);
         }
     };
 

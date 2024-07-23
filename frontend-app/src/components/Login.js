@@ -2,10 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, Grid, TextField } from '@mui/material';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuthToken } from '../slices/authSlice';
-import axiosInstance from '../axiosConfig';
 
 export default function Login() {
     const navigate = useNavigate();

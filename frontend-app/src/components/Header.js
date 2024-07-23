@@ -60,7 +60,7 @@ export default function Header() {
                 {user.username}
               </Typography>
               <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
-                {user.role == "admin" ? "Admin" : "Reader"}
+                {user.role === "admin" ? "Admin" : "Reader"}
               </Typography>
             </Box>
           </>
