@@ -42,37 +42,37 @@ exports.createTransaction = async (req, res) => {
   }
 };
 
-// Get all transactions
-exports.getTransactions = async (req, res) => {
-  try {
-    const transactions = await Transaction.find()
-      .populate('userId', 'name') // Populate user details
-      .populate('bookId', 'title author'); // Populate book details
+// // Get all transactions
+// exports.getTransactions = async (req, res) => {
+//   try {
+//     const transactions = await Transaction.find()
+//       .populate('userId', 'name') // Populate user details
+//       .populate('bookId', 'title author'); // Populate book details
 
-    res.status(200).json(transactions);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error', details: error.message });
-  }
-};
+//     res.status(200).json(transactions);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Server error', details: error.message });
+//   }
+// };
 
-// Get a transaction by ID
-exports.getTransactionById = async (req, res) => {
-  const { id } = req.params;
+// // Get a transaction by ID
+// exports.getTransactionById = async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const transaction = await Transaction.findById(id)
-      .populate('userId', 'name') // Populate user details
-      .populate('bookId', 'title author'); // Populate book details
+//   try {
+//     const transaction = await Transaction.findById(id)
+//       .populate('userId', 'name') // Populate user details
+//       .populate('bookId', 'title author'); // Populate book details
 
-    if (!transaction) {
-      return res.status(404).json({ error: 'Transaction not found' });
-    }
+//     if (!transaction) {
+//       return res.status(404).json({ error: 'Transaction not found' });
+//     }
 
-    res.status(200).json(transaction);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error', details: error.message });
-  }
-};
+//     res.status(200).json(transaction);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Server error', details: error.message });
+//   }
+// };
 
 // Get transactions by user ID
 exports.getTransactionsByUserId = async (req, res) => {
