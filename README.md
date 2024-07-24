@@ -31,3 +31,19 @@ Collections: Users, book, Transaction
 
 <h4>User Transactions</h4>
 <img  src="https://raw.githubusercontent.com/sjjana77/dijura_task/main/screenshots/transactions.jpg" />
+
+npm install gh-pages --save-dev
+
+"homepage": "https://sjjana77.github.io/ test-deploy-react",
+
+
+"predeploy": "npm run build",
+"deploy": "gh-pages -d build",
+
+git add .
+
+git commit -m "Deployed website"
+
+git push
+
+npm run deploy
