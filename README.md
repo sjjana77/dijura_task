@@ -5,7 +5,7 @@ I have done in MERN Stack.
 <div style="font-size:larger;font-weight:bold;">Database:</div>
 Database/collection data file in backend-app/database/
 Database Name: dijura_web_task
-Collections: Expenses, Users 
+Collections: Users, book, Transaction 
 
 <h3>Screenshots:</h3>
 <h4>Register</h4>
