@@ -2,6 +2,10 @@
 I have done in MERN Stack.
 [Video Demonstration of this task in drive](https://drive.google.com/file/d/1vsih45UQTRFcha6OXcC_1ahINGRmb5Dv/view?usp=sharing)
 
+<div style="font-size:larger;font-weight:bold;">
+<a href="https://docs.google.com/document/d/1IiC1Z5QwbV2blV6svzQDBculqgGHjgAhsxyWGiOfdto/edit?usp=sharing" target="_blank">Click here to view Detailed API Documentation of API Endpoints</a>
+</div>
+
 <div style="font-size:larger;font-weight:bold;">Database:</div>
 Database/collection data file in backend-app/database/
 Database Name: dijura_web_task
