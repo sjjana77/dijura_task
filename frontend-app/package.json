@@ -1,6 +1,6 @@
 {
-  "homepage": "https://sjjana77.github.io/react_task",
-  "name": "anhas_web_react",
+  "homepage": "https://sjjana77.github.io/library_managemeny_system",
+  "name": "library_managemeny_system",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
+    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
