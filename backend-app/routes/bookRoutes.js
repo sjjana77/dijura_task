@@ -9,9 +9,9 @@ router.use(verifyToken);
 router.post('/', isAdmin, bookController.createBook);
 router.put('/:id', isAdmin, bookController.updateBook);
 router.delete('/:id', isAdmin, bookController.deleteBook);
+router.get('/:id', isAdmin, bookController.getBookById);
 
 // Other user routes
 router.get('/', bookController.getAllBooks);
-router.get('/:id', bookController.getBookById);
 
 module.exports = router;
